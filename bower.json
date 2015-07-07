@@ -1,0 +1,8 @@
+{
+  "name": "python-hbpdoc",
+  "private": true,
+  "dependencies": {
+    "material-design-iconic-font": "oliamb/material-design-iconic-font#f58f22e512a4d4a51692d582398400d6df73aefe",
+    "hbp-collaboratory-theme": "~0.0.9"
+  }
+}
