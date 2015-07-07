@@ -6,6 +6,7 @@ module.exports = function (grunt) {
     var mainBowerFiles = require('main-bower-files');
     var _ = require('lodash');
     var path = require('canonical-path');
+    var semver = require('semver');
 
     var pathConfig = {
         htmlsrc: 'assets',
@@ -24,10 +25,12 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         config: pathConfig,
+        pkg: grunt.file.readJSON('bower.json'),
 
         bump: {
           options: {
             files: ['bower.json'],
+            updateConfigs: ['pkg'],
             commitFiles: ['bower.json', 'collaboratory_sphinx_theme/version.py'],
             pushTo: 'origin HEAD:master'
           }
@@ -46,10 +49,12 @@ module.exports = function (grunt) {
         // Clean generated files
         clean: {
             python: [
-                '<%= config.dest %>'
+                '<%= config.dest %>',
+                'build/',
+                '*.egg-info'
             ],
             doc: [
-                'generated'
+                'build/doc'
             ]
         },
 
@@ -158,22 +163,47 @@ module.exports = function (grunt) {
         },
 
         exec: {
+          bowerUpdate: 'bower update',
+          pythonBuild: 'python setup.py bdist -p all',
+          pythonPublish: [
+            'devpi use http://bbpgb019.epfl.ch:3141/bbprelman/release',
+            'devpi login bbprelman --password a',
+            'devpi upload dist/collaboratory_sphinx_theme-<%= pkg.version %>.all.tar.gz'
+          ].join(' && '),
+          buildDoc: 'sphinx-build doc build/doc',
+          publishDoc: {
+            cmd: function() {
+              var v = semver.parse(this.config.data.pkg.version);
+              return [
+                'cd build/doc',
+                'zip -r doc.zip *',
+                [
+                  'curl -X POST',
+                  '-F filedata=@doc.zip',
+                  '-F name="Collaboratory Sphinx Theme"',
+                  '-F version="' + v.major + '.' + v.minor + '"',
+                  '-F description="The HBP official Sphinx theme"',
+                  'http://bbpgb027.epfl.ch:5000/docs/hmd'
+                ].join(' ')
+              ].join(' && ');
+            }
+          }
         }
     });
 
     grunt.registerTask('ci', 'Run all the build steps on the CI server', function (target) {
-        var tasks = ['clean', 'buildModule'];
+        var tasks = ['clean', 'exec:bowerUpdate', 'buildModule', 'exec:buildDoc', 'exec:pythonBuild'];
         var isRelease = target === 'patch' || target === 'minor' || target === 'major';
 
         if (isRelease) {
             grunt.log.writeln('This build will be released');
             tasks.unshift('version', 'bump-only:' + target);
-            tasks.push('bump-commit', 'compress', 'uploadDoc');
+            tasks.push('bump-commit', 'exec:pythonPublish', 'exec:publishDoc');
         }
         grunt.task.run(tasks);
     });
 
     grunt.registerTask('buildModule', ['clean:python', 'wiredep', 'sass', 'autoprefixer', 'concat', 'uglify', 'copy']);
-    grunt.registerTask('serve', ['buildModule', 'clean:doc', 'connect:livereload', 'watch']);
+    grunt.registerTask('serve', ['exec:bowerUpdate', 'buildModule', 'clean:doc', 'connect:livereload', 'watch']);
     grunt.registerTask('default', ['ci']);
 };

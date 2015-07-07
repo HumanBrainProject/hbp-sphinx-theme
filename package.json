@@ -21,6 +21,7 @@
     "lodash": "^2.4.1",
     "main-bower-files": "^2.5.0",
     "request": "^2.51.0",
+    "semver": "^4.3.6",
     "time-grunt": "^1.0.0"
   }
 }
