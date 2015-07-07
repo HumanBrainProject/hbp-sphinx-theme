@@ -1,5 +1,6 @@
 {
   "name": "python-hbpdoc",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "material-design-iconic-font": "2.1.1",

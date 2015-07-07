@@ -25,6 +25,24 @@ module.exports = function (grunt) {
     grunt.initConfig({
         config: pathConfig,
 
+        bump: {
+          options: {
+            files: ['bower.json'],
+            commitFiles: ['bower.json', 'collaboratory_sphinx_theme/version.py'],
+            pushTo: 'origin HEAD:master'
+          }
+        },
+
+        version: {
+            options: {
+                pkg: 'bower.json',
+                prefix: '__version__ = \''
+            },
+            versionPy: {
+              src: ['collaboratory_sphinx_theme/version.py']
+            }
+        },
+
         // Clean generated files
         clean: {
             python: [
@@ -145,11 +163,12 @@ module.exports = function (grunt) {
 
     grunt.registerTask('ci', 'Run all the build steps on the CI server', function (target) {
         var tasks = ['clean', 'buildModule'];
-        var isRelease = target === 'publish';
+        var isRelease = target === 'patch' || target === 'minor' || target === 'major';
 
         if (isRelease) {
             grunt.log.writeln('This build will be released');
-            tasks.push('compress', 'uploadDoc');
+            tasks.unshift('version', 'bump-only:' + target);
+            tasks.push('bump-commit', 'compress', 'uploadDoc');
         }
         grunt.task.run(tasks);
     });
