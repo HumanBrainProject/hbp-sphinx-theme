@@ -6,7 +6,6 @@ module.exports = function (grunt) {
     var mainBowerFiles = require('main-bower-files');
     var _ = require('lodash');
     var path = require('canonical-path');
-    var semver = require('semver');
 
     var pathConfig = {
         htmlsrc: 'assets',
@@ -19,9 +18,6 @@ module.exports = function (grunt) {
 
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
-
-    // Time how long tasks take. Can help when optimizing build times
-    require('time-grunt')(grunt);
 
     grunt.initConfig({
         config: pathConfig,
@@ -162,6 +158,18 @@ module.exports = function (grunt) {
             }
         },
 
+        compress: {
+          doc: {
+            options: {
+              archive: 'build/doc.zip',
+              mode: 'zip'
+            },
+            src: ['**'],
+            cwd: 'build/doc/',
+            expand: true
+          }
+        },
+
         exec: {
           bowerUpdate: 'bower update',
           pythonBuild: 'python setup.py sdist',
@@ -170,35 +178,47 @@ module.exports = function (grunt) {
             'venv/bin/devpi login bbprelman --password a',
             'venv/bin/devpi upload dist/collaboratory_sphinx_theme-<%= pkg.version %>.tar.gz'
           ].join(' && '),
-          buildDoc: 'venv/bin/sphinx-build doc build/doc',
-          publishDoc: {
-            cmd: function() {
-              var v = semver.parse(this.config.data.pkg.version);
-              return [
-                'cd build/doc',
-                'zip -r doc.zip *',
-                [
-                  'curl -X POST',
-                  '-F filedata=@doc.zip',
-                  '-F name="Collaboratory Sphinx Theme"',
-                  '-F version="' + v.major + '.' + v.minor + '"',
-                  '-F description="The HBP official Sphinx theme"',
-                  'http://bbpgb027.epfl.ch:5000/docs/hmd'
-                ].join(' ')
-              ].join(' && ');
-            }
+          buildDoc: 'venv/bin/sphinx-build doc build/doc'
+        },
+
+        publishDoc: {
+          doc: {
+            name: 'Collaboratory Sphinx Theme',
+            description: 'The HBP official Sphinx theme',
+            version: '<%= pkg.version %>'
           }
         }
     });
 
+    grunt.registerMultiTask('publishDoc', 'upload documentation to server', function() {
+      var fs = require('fs');
+      var request = require('request');
+      var done = this.async();
+
+      var r = request.post('http://bbpgb027.epfl.ch:5000/docs/hmd', function(err, res) {
+        if(err || res.statusCode !== 200) {
+          grunt.fail.warn('Unable to upload documentation');
+        } else {
+          grunt.log.writeln('Documentation uploaded');
+        }
+        done();
+      });
+
+      var form = r.form();
+      form.append('name', this.data.name);
+      form.append('description', this.data.description);
+      form.append('version', this.data.version);
+      form.append('filedata', fs.createReadStream('build/doc.zip'));
+    });
+
     grunt.registerTask('ci', 'Run all the build steps on the CI server', function (target) {
-        var tasks = ['clean', 'exec:bowerUpdate', 'buildModule', 'exec:buildDoc', 'exec:pythonBuild'];
+        var tasks = ['clean', 'exec:bowerUpdate', 'buildModule', 'exec:pythonBuild', 'exec:buildDoc', 'compress'];
         var isRelease = target === 'patch' || target === 'minor' || target === 'major';
 
         if (isRelease) {
             grunt.log.writeln('This build will be released');
             tasks.unshift('bump-only:' + target, 'version');
-            tasks.push('bump-commit', 'exec:pythonPublish', 'exec:publishDoc');
+            tasks.push('bump-commit', 'exec:pythonPublish', 'publishDoc');
         }
         grunt.task.run(tasks);
     });
