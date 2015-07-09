@@ -32,7 +32,7 @@ Download the package or add it to your ``requirements.txt`` file:
 
 .. code:: bash
 
-    $ pip install collaboratory_sphinx_theme -i http://bbpgb019.epfl.ch/simple
+    $ pip install collaboratory_sphinx_theme -i http://bbpgb019.epfl.ch:9090/simple
 
 In your ``conf.py`` file:
 
