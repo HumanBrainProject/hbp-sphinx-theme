@@ -1,5 +1,6 @@
 {
   "name": "collaboratory-sphinx-theme",
+  "version": "0.0.1",
   "private": true,
   "devDependencies": {
     "canonical-path": "^0.0.2",

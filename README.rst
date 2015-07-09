@@ -72,11 +72,17 @@ installing node_.
 Set up your environment
 -----------------------
 
+1. Create a virtual environment in ./venv
+
+.. code::
+
+    virtualenv venv
+
 1. Install sphinx_ into a virtual environment.
 
 .. code::
 
-    pip install sphinx
+    venv/bin/pip install sphinx
 
 
 2. Install node, bower and grunt.
@@ -106,6 +112,25 @@ This default task will do the following **very cool things that make it worth th
 3. It'll watch for changes to the sass files and build css from the changes.
 4. It'll rebuild the sphinx docs anytime it notices a change to .rst, .html, .js
    or .css files.
+
+
+Build and Deploy
+----------------
+
+The build is done using grunt.
+
+.. code:: bash
+
+    grunt ci
+
+To deploy a new version, you need the commit rights on the gerrit repository.
+Only the Continuous Integration should have them. Just pass a patch level you
+want to bump to using one of ``patch``, ``minor`` or ``major``. Here, we
+used ``patch``.
+
+.. code:: bash
+
+   grunt ci:patch
 
 
 Changelog

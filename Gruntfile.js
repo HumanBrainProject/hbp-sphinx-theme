@@ -29,9 +29,9 @@ module.exports = function (grunt) {
 
         bump: {
           options: {
-            files: ['bower.json'],
+            files: ['bower.json', 'package.json'],
             updateConfigs: ['pkg'],
-            commitFiles: ['bower.json', 'collaboratory_sphinx_theme/version.py'],
+            commitFiles: ['bower.json', 'package.json', 'collaboratory_sphinx_theme/version.py'],
             pushTo: 'origin HEAD:master'
           }
         },
@@ -164,13 +164,13 @@ module.exports = function (grunt) {
 
         exec: {
           bowerUpdate: 'bower update',
-          pythonBuild: 'python setup.py bdist -p all',
+          pythonBuild: 'python setup.py sdist',
           pythonPublish: [
-            'devpi use http://bbpgb019.epfl.ch:3141/bbprelman/release',
-            'devpi login bbprelman --password a',
-            'devpi upload dist/collaboratory_sphinx_theme-<%= pkg.version %>.all.tar.gz'
+            'venv/bin/devpi use http://bbpgb019.epfl.ch:3141/bbprelman/release',
+            'venv/bin/devpi login bbprelman --password a',
+            'venv/bin/devpi upload dist/collaboratory_sphinx_theme-<%= pkg.version %>.tar.gz'
           ].join(' && '),
-          buildDoc: 'sphinx-build doc build/doc',
+          buildDoc: 'venv/bin/sphinx-build doc build/doc',
           publishDoc: {
             cmd: function() {
               var v = semver.parse(this.config.data.pkg.version);
@@ -197,7 +197,7 @@ module.exports = function (grunt) {
 
         if (isRelease) {
             grunt.log.writeln('This build will be released');
-            tasks.unshift('version', 'bump-only:' + target);
+            tasks.unshift('bump-only:' + target, 'version');
             tasks.push('bump-commit', 'exec:pythonPublish', 'exec:publishDoc');
         }
         grunt.task.run(tasks);
