@@ -1,6 +1,6 @@
 {
   "name": "collaboratory-sphinx-theme",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "material-design-iconic-font": "2.1.1",
