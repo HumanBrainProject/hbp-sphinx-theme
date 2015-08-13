@@ -11,8 +11,8 @@ directory = os.path.abspath(os.path.dirname(__file__))
 setup(
     name='collaboratory_sphinx_theme',
     version=__version__,
-    url='https://bbpcode.epfl.ch/code/#/admin/projects/platform/hbp/collaboratory-sphinx-theme',
-    license='HBP/EPFL all right reserved',
+    url='https://github.com/HumanBrainProject/hbp-collaboratory-sphinx-theme',
+    license='MIT',
     author='Olivier Amblet',
     author_email='olivier.amblet@epfl.ch',
     description='Collaboratory theme for Sphinx, 2015 version.',
