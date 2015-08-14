@@ -8,6 +8,10 @@
 .. _demo: https://collab.humanbrainproject.eu/#/collab/54/nav/368
 .. _repository: https://bbpcode.epfl.ch/code/#/admin/projects/platform/hbp/collaboratory-sphinx-theme
 
+.. image:: https://travis-ci.org/genric/hbp-collaboratory-sphinx-theme.svg?branch=master
+    :target: https://travis-ci.org/genric/hbp-collaboratory-sphinx-theme
+    :align: right
+
 **************************
 Collaboratory Sphinx Theme
 **************************
