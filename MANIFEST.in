@@ -1,5 +1,0 @@
-include *.txt
-include *.rst
-recursive-include collaboratory_sphinx_theme *.html
-recursive-include collaboratory_sphinx_theme/static *.*
-recursive-include collaboratory_sphinx_theme theme.conf

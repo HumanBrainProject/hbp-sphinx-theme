@@ -1,8 +1,5 @@
-*.pyc
-/venv
-/build
-*.egg-info
 /assets/bower_components
 /dist
 /node_modules
-/collaboratory_sphinx_theme/static
+/static
+credentials.json
