@@ -110,7 +110,7 @@ module.exports = function (grunt) {
 
         publishAsset: {
             options: {
-                token: grunt.file.readJSON('credentials.json').token,
+                token: grunt.file.exists('credentials.json') ? grunt.file.readJSON('credentials.json').token : null,
             }
         }
     });
@@ -120,6 +120,11 @@ module.exports = function (grunt) {
         var request = require('request');
         var options = this.options({});
         var done = this.async();
+        if (!options.token) {
+            grunt.log.error('Please make sure you have "credentials.json" file in the project directory,');
+            grunt.log.error('it should contain github api access token: { "token": "TOKEN" }');
+            grunt.fail.warn('Unable to continue without github api access token!');
+        }
         request({ url: grunt.config('ghApi') + 'releases/latest',
                   headers: {'User-Agent': 'request'}},
                 function (error, response, body) {
