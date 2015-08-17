@@ -17,13 +17,14 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
 
     grunt.initConfig({
+        ghApi: 'https://api.github.com/repos/HumanBrainProject/hbp-collaboratory-sphinx-theme/',
+        assetName: 'hbp-collaboratory-sphinx-theme',
+        asset: '<%= assetName %>.zip',
+        assetLocation: 'dist/',
         config: pathConfig,
         pkg: grunt.file.readJSON('bower.json'),
 
-        clean: [
-            '<%= config.dest %>',
-            'dist/'
-        ],
+        clean: [ '<%= config.dest %>', '<%= assetLocation %>' ],
 
         // automatically inject scripts and stylesheets dependencies into this
         // project source file.
@@ -91,7 +92,7 @@ module.exports = function (grunt) {
         compress: {
             main: {
                 options: {
-                    archive: 'dist/collaboratory-sphinx-theme.zip',
+                    archive: 'dist/<%= asset %>',
                     mode: 'zip'
                 },
                 src: ['theme.conf', 'layout.html', 'static/**']
@@ -103,9 +104,58 @@ module.exports = function (grunt) {
                 additionalFiles: ['bower.json'],
                 changelog: true,
                 npm: false,
-                beforeRelease: ['clean', 'default'],
+                afterRelease: ['dist', 'publishAsset'],
+            }
+        },
+
+        publishAsset: {
+            options: {
+                token: grunt.file.readJSON('credentials.json').token,
             }
         }
+    });
+
+    grunt.task.registerTask('publishAsset', 'Publish asset to the latest release', function() {
+        var fs = require('fs');
+        var request = require('request');
+        var options = this.options({});
+        var done = this.async();
+        request({ url: grunt.config('ghApi') + 'releases/latest',
+                  headers: {'User-Agent': 'request'}},
+                function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        var upload_url = JSON.parse(body).upload_url;
+                        var assetPath = grunt.config('assetLocation') + grunt.config('asset');
+                        var stats = fs.statSync(assetPath);
+
+                        var requestOptions = {
+                            method:  'POST',
+                            headers: { 'User-Agent': 'request',
+                                       'Authorization': 'token ' + options.token,
+                                       'Content-Length': stats.size,
+                                       'Content-Type': 'application/zip' },
+                            url: upload_url.replace('{?name}', ''),
+                            qs: {
+                                name: grunt.config('asset')
+                            }
+                        };
+
+                        fs.createReadStream(assetPath).pipe(request(requestOptions, function (error, response, body) {
+                            if (!error && response.statusCode == 201) {
+                                grunt.log.ok('Release asset uploaded');
+                                done();
+                            } else {
+                                grunt.log.error('HTTP_CODE=' + response.statusCode + ' GITHUB_RESPONSE:' + body);
+                                grunt.fail.warn('Unable to upload release asset!');
+                                done();
+                            }
+                        }));
+                    } else {
+                        grunt.log.error('HTTP_CODE=' + response.statusCode + ' GITHUB_RESPONSE:' + body);
+                        grunt.fail.warn('Unable to get the latest release!');
+                        done();
+                    }
+                });
     });
 
     grunt.registerTask('default', ['wiredep', 'sass', 'autoprefixer', 'concat', 'uglify', 'copy', 'compress']);
