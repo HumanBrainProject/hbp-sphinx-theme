@@ -104,6 +104,8 @@ module.exports = function (grunt) {
                 additionalFiles: ['bower.json'],
                 changelog: true,
                 npm: false,
+                updateVars: ['pkg'],
+                beforeRelease: ['updateThemeConfVersion'],
                 afterRelease: ['dist', 'publishAsset'],
             }
         },
@@ -112,6 +114,21 @@ module.exports = function (grunt) {
             options: {
                 token: grunt.file.exists('credentials.json') ? grunt.file.readJSON('credentials.json').token : null,
             }
+        }
+    });
+
+    grunt.task.registerTask('updateThemeConfVersion', 'Update the release version in the theme.conf file', function() {
+        var replace = require('replace');
+        var shell = require('shelljs');
+        replace({
+            regex: /\d+\.\d+\.\d+/,
+            replacement: grunt.config('pkg.version'),
+            paths: ['theme.conf'],
+            recursive: false,
+            silent: false
+        });
+        if (shell.exec('git add theme.conf').code !== 0) {
+            grunt.fail.warn('Failed to add "theme.conf" to commit!');
         }
     });
 
