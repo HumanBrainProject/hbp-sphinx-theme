@@ -22,5 +22,8 @@
     "lodash": "^2.4.1",
     "main-bower-files": "^2.5.0",
     "request": "^2.58.0"
+  },
+  "scripts": {
+    "test": "node_modules/bower/bin/bower update && node_modules/grunt-cli/bin/grunt dist"
   }
 }
