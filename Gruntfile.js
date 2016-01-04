@@ -7,18 +7,20 @@ module.exports = function (grunt) {
 
     var pathConfig = {
         htmlsrc: 'assets',
-        dest: 'static'
+        dest: 'hbp_sphinx_theme/static'
     };
 
     var relativePath = function(p) {
         return path.relative(pathConfig.htmlsrc, p);
     };
 
+    console.log('main files', _.map(mainBowerFiles({filter: /.*\.(eot|woff|svg|ttf|otf|png)/}), relativePath));
+
     require('load-grunt-tasks')(grunt);
 
     grunt.initConfig({
-        ghApi: 'https://api.github.com/repos/HumanBrainProject/hbp-collaboratory-sphinx-theme/',
-        assetName: 'hbp-collaboratory-sphinx-theme',
+        ghApi: 'https://api.github.com/repos/HumanBrainProject/hbp-sphinx-theme/',
+        assetName: 'hbp-sphinx-theme',
         asset: '<%= assetName %>.zip',
         assetLocation: 'dist/',
         config: pathConfig,
@@ -63,6 +65,14 @@ module.exports = function (grunt) {
             }
         },
 
+        cssmin: {
+            dist: {
+                files: {
+                  '<%= config.dest %>/hbpdoc.min.css': ['<%= config.dest %>/hbpdoc.css']
+                }
+            }
+        },
+
         // copy assets to hbpdoc module
         copy: {
             deps: {
@@ -93,7 +103,8 @@ module.exports = function (grunt) {
             main: {
                 options: {
                     archive: 'dist/<%= asset %>',
-                    mode: 'zip'
+                    mode: 'zip',
+                    cwd: 'hbp_sphinx_theme'
                 },
                 src: ['theme.conf', 'layout.html', 'static/**']
             }
@@ -180,6 +191,6 @@ module.exports = function (grunt) {
                 });
     });
 
-    grunt.registerTask('default', ['wiredep', 'sass', 'autoprefixer', 'concat', 'uglify', 'copy', 'compress']);
+    grunt.registerTask('default', ['wiredep', 'sass', 'autoprefixer', 'cssmin', 'concat', 'uglify', 'copy', 'compress']);
     grunt.registerTask('dist', ['clean', 'default']);
 };

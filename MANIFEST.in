@@ -1,0 +1,10 @@
+include *.txt
+include LICENSE
+recursive-include hbp_sphinx_theme *.conf
+recursive-include hbp_sphinx_theme *.css
+recursive-include hbp_sphinx_theme *.eot
+recursive-include hbp_sphinx_theme *.html
+recursive-include hbp_sphinx_theme *.js
+recursive-include hbp_sphinx_theme *.svg
+recursive-include hbp_sphinx_theme *.ttf
+recursive-include hbp_sphinx_theme *.woff

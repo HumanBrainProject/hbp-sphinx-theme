@@ -6,12 +6,12 @@
 .. _grunt: http://www.gruntjs.com
 .. _node: http://www.nodejs.com
 .. _demo: https://collab.humanbrainproject.eu/#/collab/54/nav/368
-.. _repository: https://github.com/HumanBrainProject/hbp-collaboratory-sphinx-theme
-.. _release: https://github.com/HumanBrainProject/hbp-collaboratory-sphinx-theme/releases/latest
+.. _repository: https://github.com/HumanBrainProject/hbp-sphinx-theme
+.. _release: https://github.com/HumanBrainProject/hbp-sphinx-theme/releases/latest
 .. _documentation example: https://github.com/HumanBrainProject/hbp-collaboratory-doc-example
 
-.. image:: https://travis-ci.org/HumanBrainProject/hbp-collaboratory-sphinx-theme.svg?branch=master
-    :target: https://travis-ci.org/HumanBrainProject/hbp-collaboratory-sphinx-theme
+.. image:: https://travis-ci.org/HumanBrainProject/hbp-sphinx-theme.svg?branch=master
+    :target: https://travis-ci.org/HumanBrainProject/hbp-sphinx-theme
 
 ******************************
 HBP Collaboratory Sphinx Theme
@@ -30,17 +30,41 @@ Collaboratory. It can be used for standalone websites as well.
 Installation
 ============
 
-Download the ``hbp-collaboratory-sphinx-theme.zip`` provided by the latest release_
+Via package
+-----------
+
+Download the package or add it to your requirements.txt file:
+
+.. code:: bash
+
+   pip install sphinx_rtd_theme
+
+
+In your conf.py file:
+
+.. code:: Python
+
+   import sphinx_rtd_theme
+   html_theme = "sphinx_rtd_theme"
+   html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
+
+Via download
+------------
+
+Download the ``hbp-sphinx-theme.zip`` provided by the latest release_
 to your documentation project directory.
 
 As explained in `sphinx documentation`__, in your ``conf.py`` file:
 
 __ http://sphinx-doc.org/theming.html#using-a-theme
 
+
 .. code:: python
 
-    html_theme = 'hbp-collaboratory-sphinx-theme'
+    html_theme = 'hbp-sphinx-theme'
     html_theme_path = ['.']
+
 
 Contributing or modifying the theme
 ===================================
