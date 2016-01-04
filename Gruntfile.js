@@ -128,6 +128,10 @@ module.exports = function (grunt) {
         }
     });
 
+    exec: {
+        'pypi': 'python setup.py sdist upload -r pypi'
+    }
+
     grunt.task.registerTask('updateThemeConfVersion', 'Update the release version in the theme.conf file', function() {
         var replace = require('replace');
         var shell = require('shelljs');
