@@ -134,11 +134,14 @@ module.exports = function (grunt) {
         replace({
             regex: /\d+\.\d+\.\d+/,
             replacement: grunt.config('pkg.version'),
-            paths: ['theme.conf'],
+            paths: ['hbp_sphinx_theme/theme.conf', 'hbp_sphinx_theme/__init__.py'],
             recursive: false,
             silent: false
         });
-        if (shell.exec('git add theme.conf').code !== 0) {
+        if (shell.exec('git add hbp_sphinx_theme/theme.conf').code !== 0) {
+            grunt.fail.warn('Failed to add "theme.conf" to commit!');
+        }
+        if (shell.exec('git add hbp_sphinx_theme/__init__.py').code !== 0) {
             grunt.fail.warn('Failed to add "theme.conf" to commit!');
         }
     });
