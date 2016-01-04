@@ -5,6 +5,8 @@ python:
 - '2.7'
 deploy:
   provider: pypi
+  on:
+    tags: true
   user:
     secure: d+1Y5I2sKBKUZWWrCLnHIFaLSzWaO0eBeGfJzduWWw3Zpbbp8Kgeq/W9ymV/OjFgaPCabj/2qiVLJMv5F6KINyTjHwCMquRybOLOASkzePFzIidB/EpuibJbBZTI3FAUTfjUL9Jh0jd6sU1WBcu6RQJzYf2i22MWmLTBTKrU/o/vZZeIe9jfSnhRov1BcR94+byx4GiV5Lt3gLVZi6rxAWE1bqM0k+QzhGa3OWiGoNqgSrvRCWsBhR9kgzouUvkrxN5knBfiZ3SAtj+TyG3BCl6QPa8sfp6+EDgI9IrmIW1FXiDx5isvJ7YztpKM0qKtyaeQXH+7S4yTSW31DU35B1pXEFAqyLF1gfysWJi1VPZEWhncBmBQ15M7XwmZ+4azV3+8IPVt+VtiQoxPbw4LH3eGg4SG5gl2t0D8TpMoLv1ZlqOeN0D4gr4BIlLLwGDSd/LIv6vMU/IN9hsN3u7MOP1D3qzHX/Rmds715mBceYhUyPHtAA62ZmSNcA6Vyz13yxhd/eDxWvbHvhEUSawk/u+mbZqUJTb6OKhmFD0qwjhgeB4OCFKgAS1E1tEbpfIQ64yjDCM/hc0GX0oJ1mqwRc9FSQWziSTcJcUonDq194DD9BGzF0b8pvrIeR7c+n2GMPLrD9NdghiUuDh91ptICwh9vbQqdSW+0E5RWL/Eysc=
   password:
