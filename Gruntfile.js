@@ -19,9 +19,7 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
 
     grunt.initConfig({
-        ghApi: 'https://api.github.com/repos/HumanBrainProject/hbp-sphinx-theme/',
-        assetName: 'hbp-sphinx-theme',
-        asset: '<%= assetName %>.zip',
+        asset: 'hbp_sphinx_theme.zip',
         assetLocation: 'dist/',
         config: pathConfig,
         pkg: grunt.file.readJSON('bower.json'),
@@ -104,9 +102,10 @@ module.exports = function (grunt) {
                 options: {
                     archive: 'dist/<%= asset %>',
                     mode: 'zip',
-                    cwd: 'hbp_sphinx_theme'
                 },
-                src: ['theme.conf', 'layout.html', 'static/**']
+                expand: true,
+                cwd: 'hbp_sphinx_theme/',
+                src: ['theme.conf', 'layout.html', 'static/**'],
             }
         },
 
@@ -117,13 +116,6 @@ module.exports = function (grunt) {
                 npm: false,
                 updateVars: ['pkg'],
                 beforeRelease: ['updateThemeConfVersion'],
-                afterRelease: ['dist', 'publishAsset'],
-            }
-        },
-
-        publishAsset: {
-            options: {
-                token: grunt.file.exists('credentials.json') ? grunt.file.readJSON('credentials.json').token : null,
             }
         }
     });
@@ -146,54 +138,5 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.task.registerTask('publishAsset', 'Publish asset to the latest release', function() {
-        var fs = require('fs');
-        var request = require('request');
-        var options = this.options({});
-        var done = this.async();
-        if (!options.token) {
-            grunt.log.error('Please make sure you have "credentials.json" file in the project directory,');
-            grunt.log.error('it should contain github api access token: { "token": "TOKEN" }');
-            grunt.fail.warn('Unable to continue without github api access token!');
-        }
-        request({ url: grunt.config('ghApi') + 'releases/latest',
-                  headers: {'User-Agent': 'request'}},
-                function (error, response, body) {
-                    if (!error && response.statusCode == 200) {
-                        var upload_url = JSON.parse(body).upload_url;
-                        var assetPath = grunt.config('assetLocation') + grunt.config('asset');
-                        var stats = fs.statSync(assetPath);
-
-                        var requestOptions = {
-                            method:  'POST',
-                            headers: { 'User-Agent': 'request',
-                                       'Authorization': 'token ' + options.token,
-                                       'Content-Length': stats.size,
-                                       'Content-Type': 'application/zip' },
-                            url: upload_url.replace('{?name}', ''),
-                            qs: {
-                                name: grunt.config('asset')
-                            }
-                        };
-
-                        fs.createReadStream(assetPath).pipe(request(requestOptions, function (error, response, body) {
-                            if (!error && response.statusCode == 201) {
-                                grunt.log.ok('Release asset uploaded');
-                                done();
-                            } else {
-                                grunt.log.error('HTTP_CODE=' + response.statusCode + ' GITHUB_RESPONSE:' + body);
-                                grunt.fail.warn('Unable to upload release asset!');
-                                done();
-                            }
-                        }));
-                    } else {
-                        grunt.log.error('HTTP_CODE=' + response.statusCode + ' GITHUB_RESPONSE:' + body);
-                        grunt.fail.warn('Unable to get the latest release!');
-                        done();
-                    }
-                });
-    });
-
     grunt.registerTask('default', ['wiredep', 'sass', 'autoprefixer', 'cssmin', 'concat', 'uglify', 'copy', 'compress']);
-    grunt.registerTask('dist', ['clean', 'default']);
 };

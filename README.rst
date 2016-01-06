@@ -37,22 +37,22 @@ Download the package or add it to your requirements.txt file:
 
 .. code:: bash
 
-   pip install sphinx_rtd_theme
+   pip install hbp_sphinx_theme
 
 
 In your conf.py file:
 
 .. code:: Python
 
-   import sphinx_rtd_theme
-   html_theme = "sphinx_rtd_theme"
-   html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+   import hbp_sphinx_theme
+   html_theme = "hbp_sphinx_theme"
+   html_theme_path = [hbp_sphinx_theme.get_html_theme_path()]
 
 
 Via download
 ------------
 
-Download the ``hbp-sphinx-theme.zip`` provided by the latest release_
+Download the ``hbp_sphinx_theme.zip`` provided by the latest release_
 to your documentation project directory.
 
 As explained in `sphinx documentation`__, in your ``conf.py`` file:
@@ -62,7 +62,7 @@ __ http://sphinx-doc.org/theming.html#using-a-theme
 
 .. code:: python
 
-    html_theme = 'hbp-sphinx-theme'
+    html_theme = 'hbp_sphinx_theme'
     html_theme_path = ['.']
 
 

@@ -2,7 +2,6 @@
 /dist
 /node_modules
 /hbp_sphinx_theme/static
-credentials.json
 *.pyc
 /build
 *.egg-info

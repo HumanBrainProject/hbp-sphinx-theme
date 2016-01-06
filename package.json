@@ -1,6 +1,6 @@
 {
   "name": "hbp-sphinx-theme",
-  "version": "0.3.3",
+  "version": "0.3.2",
   "private": true,
   "devDependencies": {
     "bower": "~1.4.1",
@@ -27,6 +27,6 @@
     "shelljs": "~0.5.3"
   },
   "scripts": {
-    "test": "node_modules/bower/bin/bower update && node_modules/grunt-cli/bin/grunt dist"
+    "test": "node_modules/bower/bin/bower update && node_modules/grunt-cli/bin/grunt"
   }
 }
