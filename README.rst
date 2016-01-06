@@ -6,12 +6,12 @@
 .. _grunt: http://www.gruntjs.com
 .. _node: http://www.nodejs.com
 .. _demo: https://collab.humanbrainproject.eu/#/collab/54/nav/368
-.. _repository: https://github.com/HumanBrainProject/hbp-collaboratory-sphinx-theme
-.. _release: https://github.com/HumanBrainProject/hbp-collaboratory-sphinx-theme/releases/latest
+.. _repository: https://github.com/HumanBrainProject/hbp-sphinx-theme
+.. _release: https://github.com/HumanBrainProject/hbp-sphinx-theme/releases/latest
 .. _documentation example: https://github.com/HumanBrainProject/hbp-collaboratory-doc-example
 
-.. image:: https://travis-ci.org/HumanBrainProject/hbp-collaboratory-sphinx-theme.svg?branch=master
-    :target: https://travis-ci.org/HumanBrainProject/hbp-collaboratory-sphinx-theme
+.. image:: https://travis-ci.org/HumanBrainProject/hbp-sphinx-theme.svg?branch=master
+    :target: https://travis-ci.org/HumanBrainProject/hbp-sphinx-theme
 
 ******************************
 HBP Collaboratory Sphinx Theme
