@@ -1,3 +1,24 @@
-language: node_js
-node_js:
-  - "0.10"
+language: python
+before_install: nvm install 0.10
+before_script:
+  - npm install
+  - npm test
+script: python setup.py sdist
+node_js: '0.10'
+python: '2.7'
+deploy:
+- provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: wJ/nndJ6WZhNhB4GAHf0vAbL06gARcAbCeVIipDIipd5P/kC7BB7m4XSXWX+IgqtzTo85BQg9AnIthI6xhKunJwr/O/1sxosu2abcOp7CbLGnZeoPhyrAcf6pr0sB+SXh4U36qCJn2tC505WQ1ZPd5B6Axb5O7yaL//1GIrcueFt3SR5ISjvQ6g1/4iYAq2n80E1nl0XFVI+DuyA54X0eK1od14AKylMJk/wjJkl6c0IX1DFYllCb+BeyF1O3KQb8yTAdKEOdVGII0at8jAeRTC4VKBCln6r+/CaW+g8yfvQ2tnssLPr52emGCXis7xVawC7HFlABAibachwt2zdNUCNYZZ7cc+ViAnaxFrD3GSlbxK/gtd1NztYh1rFX4TzhNj9FI2FV1gFRSAqZBMct2tQuM1e+xqk9Fi12t4nxSeM9/GbSNr0TPK8S4fK7dfAEzS3kBjofEc/FvV4evsrV4SvcoyCYXjBG6+53HJb473ytHlc3VIY4803HXQMGgm9cQ/8OfDvfzmqxpaxYPUspQ4Co88KD+ChJm0BnDbKlxR4yJTRwrASPUfqD13cq0mAmKYtwG3b1jv1H0u4A+vD+Rhky/Y1jA6oNqnFouQkzZeaKB2cs7rnWTK2Ga/mE3dVvhLgHJS7ilSX5I3w3sOwCmnczL1F4jLh2bYABjrX+E8=
+  file: dist/hbp_sphinx_theme.zip
+  on:
+    tags: true
+- provider: pypi
+  skip_cleanup: true
+  user:
+    secure: d+1Y5I2sKBKUZWWrCLnHIFaLSzWaO0eBeGfJzduWWw3Zpbbp8Kgeq/W9ymV/OjFgaPCabj/2qiVLJMv5F6KINyTjHwCMquRybOLOASkzePFzIidB/EpuibJbBZTI3FAUTfjUL9Jh0jd6sU1WBcu6RQJzYf2i22MWmLTBTKrU/o/vZZeIe9jfSnhRov1BcR94+byx4GiV5Lt3gLVZi6rxAWE1bqM0k+QzhGa3OWiGoNqgSrvRCWsBhR9kgzouUvkrxN5knBfiZ3SAtj+TyG3BCl6QPa8sfp6+EDgI9IrmIW1FXiDx5isvJ7YztpKM0qKtyaeQXH+7S4yTSW31DU35B1pXEFAqyLF1gfysWJi1VPZEWhncBmBQ15M7XwmZ+4azV3+8IPVt+VtiQoxPbw4LH3eGg4SG5gl2t0D8TpMoLv1ZlqOeN0D4gr4BIlLLwGDSd/LIv6vMU/IN9hsN3u7MOP1D3qzHX/Rmds715mBceYhUyPHtAA62ZmSNcA6Vyz13yxhd/eDxWvbHvhEUSawk/u+mbZqUJTb6OKhmFD0qwjhgeB4OCFKgAS1E1tEbpfIQ64yjDCM/hc0GX0oJ1mqwRc9FSQWziSTcJcUonDq194DD9BGzF0b8pvrIeR7c+n2GMPLrD9NdghiUuDh91ptICwh9vbQqdSW+0E5RWL/Eysc=
+  password:
+    secure: VW55LTED/iK3azHxvlszfdmEm+JZNLLa++7CyEW9JCqFrUPki5h4wJt+CGBqtkJIG+mqtiYuIZRUGWCGoeWE/Lad+AY+dYzfy8TXqba28v3Ht57Awsaliwoth5TpQbA1wi0kxkdZ77pbH3nlgcM9+YqIUdCOTS29k6upDvO7RUOruzRApJV+x61/mw9M0+oZIMOlOsYyByHMlBTj7ylrhsE3Sr2qaILOMlTdvN26hcnl+3FG9yX4REQs0ObCTBdlGO/dbZ0b50f2d6WygcahZzOqWEu6Q6xm16Kh+RpKiupbqJXV7qfx5qo4SNiorDcom+vXuOjXkCvqteY53Nl6zQi5AMtzd1vCXgZ0D5PMXT0+eFSgvhQB3ODjOMDkWioGVLJDzAmRd8FQO0jG1R6hmzD/2POOV0YXHo/5oHPkU1WC3y7a+/MYKMMUH1a8ANdvtBm1eJ82xRKfwou53eyOOaPHEFbjdAOq9E/SXPlpNtp4iS66u7BZAuUUEmTHzlguCmp2TwnTy8af6m544T+oJwD+UPoXZc6UuboYmu9OS9YFLuRJinbQsc6pF7+lcv8uXp9BPV+A7SJZ4Xd0alnX3B6Z8zHUdpiTLdBCbuDaT/bva0jX6jYmewHgNO1AQioePT7Qkcm9NNaHKN6ZUg/Zkt9QzvlD04+fJegdJypva98=
+  on:
+    tags: true

@@ -1,5 +1,8 @@
 /assets/bower_components
 /dist
 /node_modules
-/static
-credentials.json
+/hbp_sphinx_theme/static
+*.pyc
+/build
+*.egg-info
+/venv
