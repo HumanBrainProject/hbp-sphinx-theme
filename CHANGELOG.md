@@ -1,6 +1,5 @@
-* Release with pypi on Travis.ci
-
-### 0.3.3 - 2016-01-04
+### 0.3.4 - 2016-01-07
+* release in pypi repo
 * make it a valid Python module
 * added release version info to theme.conf options section
 
